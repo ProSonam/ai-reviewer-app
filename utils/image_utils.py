@@ -1,12 +1,16 @@
 # utils/image_utils.py
 
-import replicate
-import os
+
 from datetime import datetime
 from urllib.request import urlretrieve
 
-# Set your Replicate API token
-replicate.Client(api_token="r8_TpDI9TmGEN91gBcJ2Mnw3qv2unV3BFd1qlhKg")
+from dotenv import load_dotenv
+import os
+import replicate
+
+load_dotenv()
+replicate.Client(api_token=os.environ["REPLICATE_API_TOKEN"])
+#replicate.Client(api_token="r8_TpDI9TmGEN91gBcJ2Mnw3qv2unV3BFd1qlhKg")
 
 
 # Define style prompts
