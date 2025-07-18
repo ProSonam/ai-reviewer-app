@@ -13,20 +13,18 @@ def generate_stylized_images(image_path, num_images=3):
         raise Exception("REPLICATE_API_TOKEN is not set")
 
     replicate.Client(api_token=REPLICATE_API_TOKEN)
+
+    # Ensure image is in RGB mode (not RGBA)
     image = Image.open(image_path).convert("RGB")
-    # Load and encode image
-    image = Image.open(image_path)
     buffered = BytesIO()
     image.save(buffered, format="JPEG")
     img_bytes = buffered.getvalue()
 
-    # Prompt to guide the model
     prompt = (
         "Ultra-realistic commercial product photo. Studio lighting, clean background, "
         "crisp focus on product. Style: professional advertisement for Amazon."
     )
 
-    # Call Replicate model for each variation
     generated_images = []
     for _ in range(num_images):
         output_url = replicate.run(
