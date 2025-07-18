@@ -5,7 +5,7 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 model = genai.GenerativeModel('gemini-pro')
 
-def generate_caption(review_text):
+def generate_product_caption(review_text):
     prompt = f"""
 You are a product caption generator with a strong focus on highlighting sustainability, wellness, affordability, and usefulness. Given the review below, generate:
 
