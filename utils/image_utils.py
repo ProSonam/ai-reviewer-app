@@ -3,50 +3,50 @@
 import replicate
 import os
 from datetime import datetime
-from PIL import Image
+from urllib.request import urlretrieve
 
 # Set your Replicate API token
 os.environ["REPLICATE_API_TOKEN"] = "r8_JTpfLf4C98y9yp5zMa3xvEnuufeARgn3XmxDt"
 
-# Model name
-MODEL_ID = "fofr/sdxl-style-transfer"
-MODEL_VERSION = "b54b1994be8fe984210cc363a2a20a2a6f69c445cccb2f7b8fcd36a1227f12f9"
+# New model and version
+MODEL_ID = "black-forest-labs/flux-kontext-pro"
 
 # Define style prompts
 STYLE_PROMPTS = {
-    "Minimalist Studio": "product in a clean studio, soft shadows, minimal background, high detail, commercial product photo",
-    "Vibrant Ad": "bright colors, energetic vibe, professional commercial product photo, sharp focus",
-    "Dark Luxury": "moody lighting, dark background, elegant, premium product style, high contrast",
-    "Natural Light": "sunlit background, natural wooden table, casual environment, warm tone"
+    "90s Cartoon": "Make this a 90s cartoon",
+    "Comic Style": "Comic book inked lines, saturated colors",
+    "Cyberpunk Anime": "Futuristic cyberpunk anime style",
+    "Dreamy Pastel": "Soft pastel illustration with dreamy tones"
 }
 
 def generate_stylized_images(image_path):
     output_paths = []
-    model = replicate.models.get(MODEL_ID).versions.get(MODEL_VERSION)
 
     for style_name, style_prompt in STYLE_PROMPTS.items():
         print(f"Generating for style: {style_name}")
 
-        output_url = model.predict(
+        # Upload the image to Replicate first
+        image_url = replicate.files.upload(image_path)
+
+        # Run the model with required input
+        output_url = replicate.run(
+            MODEL_ID,
             input={
-                "image": open(image_path, "rb"),
                 "prompt": style_prompt,
-                "seed": 42
+                "input_image": image_url,
+                "output_format": "jpg"
             }
         )
 
         if isinstance(output_url, list):
             output_url = output_url[0]
 
-        # Save the image from URL
+        # Save the output image
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         output_filename = f"{style_name.replace(' ', '_')}_{timestamp}.jpg"
         output_path = os.path.join("outputs", output_filename)
 
         os.makedirs("outputs", exist_ok=True)
-
-        # Download image from URL
-        from urllib.request import urlretrieve
         urlretrieve(output_url, output_path)
 
         output_paths.append(output_path)
