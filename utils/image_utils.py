@@ -13,7 +13,7 @@ def generate_stylized_images(image_path, num_images=3):
         raise Exception("REPLICATE_API_TOKEN is not set")
 
     replicate.Client(api_token=REPLICATE_API_TOKEN)
-
+    image = Image.open(image_path).convert("RGB")
     # Load and encode image
     image = Image.open(image_path)
     buffered = BytesIO()
