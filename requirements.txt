@@ -6,3 +6,7 @@ Pillow
 replicate
 python-dotenv
 
+requests
+transformers
+torch
+
