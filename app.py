@@ -1,6 +1,7 @@
 import streamlit as st
 from utils.image_utils import generate_stylized_images
-from utils.caption_gen import generate_captions
+from utils.caption_gen import generate_product_caption
+
 import os
 from PIL import Image
 
