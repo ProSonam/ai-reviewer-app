@@ -13,7 +13,7 @@ if st.button("✨ Generate Caption"):
         st.warning("Please upload an image and paste a review.")
     else:
         # Process image
-        enhanced = enhance_image(uploaded_image)
+        enhanced = generate_stylized_images(uploaded_image)
         st.image(enhanced, caption="Enhanced Image", use_column_width=True)
 
         # Generate caption
