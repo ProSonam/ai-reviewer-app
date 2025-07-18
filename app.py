@@ -23,7 +23,7 @@ if uploaded_file is not None:
     image = Image.open(uploaded_file).convert("RGB")
     image.save(input_image_path, format="JPEG")  # Ensure JPEG for Replicate
 
-    st.image(image, caption="Original Uploaded Image", use_column_width=True)
+    st.image(image, caption="Original Uploaded Image", use_use_container_width=True)
 
     with st.spinner("Processing your image and generating stylized versions..."):
         try:
