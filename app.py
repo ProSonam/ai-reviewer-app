@@ -1,24 +1,37 @@
 import streamlit as st
-from utils.caption_gen import generate_product_caption
 from utils.image_utils import generate_stylized_images
+from utils.caption_gen import generate_captions
+import os
+from PIL import Image
 
-st.title("🪄 AI Product Reviewer")
-st.subheader("Upload product image + review → Get catchy caption & star rating!")
+# Set Streamlit page config
+st.set_page_config(page_title="AI Product Image & Caption Generator", layout="centered")
 
-uploaded_image = st.file_uploader("📸 Upload a product image", type=["jpg", "jpeg", "png"])
-review_text = st.text_area("📝 Paste a customer review")
+st.title("📸 AI Product Image & Caption Generator")
+st.markdown("Upload a product image and get stylized commercial-quality versions with auto-generated Amazon-style captions.")
 
-if st.button("✨ Generate Caption"):
-    if not uploaded_image or not review_text:
-        st.warning("Please upload an image and paste a review.")
-    else:
-        # Process image
-        enhanced = generate_stylized_images(uploaded_image)
-        st.image(enhanced, caption="Enhanced Image", use_column_width=True)
+# File uploader
+uploaded_file = st.file_uploader("Upload your product image", type=["png", "jpg", "jpeg"])
 
-        # Generate caption
-        with st.spinner("Generating caption..."):
-            caption = generate_product_caption(review_text)
+# Generate on button click
+if uploaded_file is not None:
+    with st.spinner("Processing your image..."):
+        input_image_path = os.path.join("uploads", uploaded_file.name)
+        os.makedirs("uploads", exist_ok=True)
+        with open(input_image_path, "wb") as f:
+            f.write(uploaded_file.read())
 
-        st.markdown("### 📢 Caption + Rating")
-        st.success(caption)
+        # Generate stylized images
+        stylized_paths = generate_stylized_images(input_image_path)
+
+        st.success("Stylized images generated!")
+        st.subheader("🖼️ Stylized Outputs")
+
+        for path in stylized_paths:
+            image = Image.open(path)
+            st.image(image, caption=os.path.basename(path), use_column_width=True)
+
+            # Generate caption
+            with st.spinner("Generating caption..."):
+                caption = generate_captions(path)
+            st.markdown(f"**📝 Caption:** {caption}")
