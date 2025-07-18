@@ -34,5 +34,5 @@ if uploaded_file is not None:
 
             # Generate caption
             with st.spinner("Generating caption..."):
-                caption = generate_captions(path)
+                caption = generate_product_caption(path)
             st.markdown(f"**📝 Caption:** {caption}")
