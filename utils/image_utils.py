@@ -8,31 +8,28 @@ from urllib.request import urlretrieve
 # Set your Replicate API token
 os.environ["REPLICATE_API_TOKEN"] = "r8_JTpfLf4C98y9yp5zMa3xvEnuufeARgn3XmxDt"
 
-# New model and version
-MODEL_ID = "black-forest-labs/flux-kontext-pro"
-
 # Define style prompts
 STYLE_PROMPTS = {
     "90s Cartoon": "Make this a 90s cartoon",
-    "Comic Style": "Comic book inked lines, saturated colors",
-    "Cyberpunk Anime": "Futuristic cyberpunk anime style",
-    "Dreamy Pastel": "Soft pastel illustration with dreamy tones"
+    "Studio Pop": "Professional product image, white background, studio lights",
+    "Comic Book": "Comic book style, bold lines, halftone effect",
+    "Pastel Dream": "Soft pastel colors, dreamy aesthetic, product focused"
 }
 
 def generate_stylized_images(image_path):
     output_paths = []
 
-    for style_name, style_prompt in STYLE_PROMPTS.items():
-        print(f"Generating for style: {style_name}")
+    for style_name, prompt in STYLE_PROMPTS.items():
+        print(f"Generating style: {style_name}")
 
-        # Upload the image to Replicate first
-        image_url = replicate.files.upload(image_path)
+        # Upload image to Replicate CDN
+        image_url = replicate.upload.open(image_path)
 
-        # Run the model with required input
+        # Call the new model
         output_url = replicate.run(
-            MODEL_ID,
+            "black-forest-labs/flux-kontext-pro",
             input={
-                "prompt": style_prompt,
+                "prompt": prompt,
                 "input_image": image_url,
                 "output_format": "jpg"
             }
@@ -41,11 +38,10 @@ def generate_stylized_images(image_path):
         if isinstance(output_url, list):
             output_url = output_url[0]
 
-        # Save the output image
+        # Save output to local disk
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         output_filename = f"{style_name.replace(' ', '_')}_{timestamp}.jpg"
         output_path = os.path.join("outputs", output_filename)
-
         os.makedirs("outputs", exist_ok=True)
         urlretrieve(output_url, output_path)
 
