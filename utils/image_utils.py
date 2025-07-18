@@ -23,7 +23,7 @@ def generate_stylized_images(image_path):
         print(f"Generating style: {style_name}")
 
         # Upload image to Replicate CDN
-        image_url = replicate.upload.open(image_path)
+      
 
         # Call the new model
         output_url = replicate.run(
