@@ -4,6 +4,8 @@ import os
 from PIL import Image
 from io import BytesIO
 import requests
+from dotenv import load_dotenv
+load_dotenv()
 
 # Change to the new model
 REPLICATE_MODEL = "black-forest-labs/flux-kontext-pro"
