@@ -1,5 +1,8 @@
 streamlit
 google-generativeai
 
+streamlit
 Pillow
-opencv-python
+replicate
+python-dotenv
+
