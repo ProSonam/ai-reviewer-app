@@ -6,7 +6,7 @@ from datetime import datetime
 from PIL import Image
 
 # Set your Replicate API token
-os.environ["REPLICATE_API_TOKEN"] = "your_replicate_api_token_here"
+os.environ["REPLICATE_API_TOKEN"] = "r8_JTpfLf4C98y9yp5zMa3xvEnuufeARgn3XmxDt"
 
 # Model name
 MODEL_ID = "fofr/sdxl-style-transfer"
