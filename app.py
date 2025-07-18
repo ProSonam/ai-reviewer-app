@@ -16,23 +16,29 @@ uploaded_file = st.file_uploader("Upload your product image", type=["png", "jpg"
 
 # Generate on button click
 if uploaded_file is not None:
-    with st.spinner("Processing your image..."):
-        input_image_path = os.path.join("uploads", uploaded_file.name)
-        os.makedirs("uploads", exist_ok=True)
-        with open(input_image_path, "wb") as f:
-            f.write(uploaded_file.read())
+    os.makedirs("uploads", exist_ok=True)
+    input_image_path = os.path.join("uploads", uploaded_file.name)
 
-        # Generate stylized images
-        stylized_paths = generate_stylized_images(input_image_path)
+    # Save uploaded image in RGB format
+    image = Image.open(uploaded_file).convert("RGB")
+    image.save(input_image_path, format="JPEG")  # Ensure JPEG for Replicate
 
-        st.success("Stylized images generated!")
-        st.subheader("🖼️ Stylized Outputs")
+    st.image(image, caption="Original Uploaded Image", use_column_width=True)
 
-        for path in stylized_paths:
-            image = Image.open(path)
-            st.image(image, caption=os.path.basename(path), use_column_width=True)
+    with st.spinner("Processing your image and generating stylized versions..."):
+        try:
+            stylized_paths = generate_stylized_images(input_image_path)
+        except Exception as e:
+            st.error(f"Something went wrong: {e}")
+            st.stop()
 
-            # Generate caption
-            with st.spinner("Generating caption..."):
-                caption = generate_product_caption(path)
-            st.markdown(f"**📝 Caption:** {caption}")
+    st.success("Stylized images generated!")
+    st.subheader("🖼️ Stylized Outputs")
+
+    for path in stylized_paths:
+        output_image = Image.open(path)
+        st.image(output_image, caption=os.path.basename(path), use_column_width=True)
+
+        with st.spinner("Generating caption..."):
+            caption = generate_product_caption(path)
+        st.markdown(f"**📝 Caption:** {caption}")
