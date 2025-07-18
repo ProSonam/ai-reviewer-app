@@ -6,7 +6,8 @@ from datetime import datetime
 from urllib.request import urlretrieve
 
 # Set your Replicate API token
-os.environ["REPLICATE_API_TOKEN"] = "r8_JTpfLf4C98y9yp5zMa3xvEnuufeARgn3XmxDt"
+replicate.Client(api_token="r8_TpDI9TmGEN91gBcJ2Mnw3qv2unV3BFd1qlhKg")
+
 
 # Define style prompts
 STYLE_PROMPTS = {
