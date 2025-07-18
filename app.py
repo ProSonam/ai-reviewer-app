@@ -1,6 +1,6 @@
 import streamlit as st
 from utils.caption_gen import generate_product_caption
-from utils.image_utils import enhance_image
+from utils.image_utils import generate_stylized_images
 
 st.title("🪄 AI Product Reviewer")
 st.subheader("Upload product image + review → Get catchy caption & star rating!")
